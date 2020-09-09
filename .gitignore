@@ -25,4 +25,4 @@ yarn.lock
 
 
 electron-builder.yml
-/dist/win-unpacked
+/dist
