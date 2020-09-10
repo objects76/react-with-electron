@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const url = require("url");
+const fs = require("fs");
 const { channels } = require("../src/shared/constants");
 
 const { autoUpdater } = require("electron-updater");
@@ -72,4 +73,12 @@ ipcMain.on(channels.APP_INFO, (event) => {
 
 ipcMain.on(channels.APP_VERSION, (event) => {
   event.sender.send(channels.APP_VERSION, { version: app.getVersion() });
+});
+
+ipcMain.handle("read-file", async (event, path) => {
+  console.log("readfile", path);
+  if (!path || !fs.existsSync(path))
+    throw new Error("read-file-complete: invalid path");
+
+  return await fs.promises.readFile(path, "utf8");
 });
